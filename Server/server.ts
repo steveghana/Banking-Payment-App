@@ -3,13 +3,15 @@ import cors from "cors";
 import session from "express-session";
 // import logger from ''
 import passport from "passport";
-import auth from "./Routes/auth";
+import { initialiser } from "./Routes/auth";
+
 import userRoute from "./Routes/userRoute";
 import dotenv from "dotenv";
-import { graphqlHTTP } from "express-graphql";
+// import { graphqlHTTP } from "express-graphql";
 dotenv.config();
-const app = express();
 
+const app = express();
+initialiser(passport);
 app.use(
   cors({
     origin: `http://localhost:${process.env.FRONTENDPORT}`,
@@ -28,7 +30,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(auth);
+// app.use(auth);
 app.use("/user", userRoute);
 app.listen(5000, () => {
   console.log(`Server listening on localhost 5000`);
