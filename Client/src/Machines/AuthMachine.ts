@@ -12,7 +12,7 @@ export interface StateProps {
   };
 }
 const backendPort = 5000;
-const backendRoute = `http://localhost:${backendPort}`;
+const backendRoute = `http://localhost:${backendPort}/user`;
 export interface AuthMachineSchema {
   states: {
     unauthorized: {};
@@ -61,7 +61,7 @@ export const authMachine = Machine<
         //actions a user can perform when unauthorised
         entry: "resetuser", //actions
         on: {
-          // SIGNIN: "signin",
+          SIGNIN: "signin",
           SIGNUP: "signup",
         },
       },
@@ -109,7 +109,8 @@ export const authMachine = Machine<
       //src
       performSignup: async (ctx, event) => {
         let payload = event;
-        const resp = await axios.post(`${backendRoute}/user`, payload);
+        const resp = await axios.post(`${backendRoute}/signup`, payload);
+        console.log(resp);
         if (resp.data) {
           Navigate.push("/signin");
           window.location.reload();
@@ -117,8 +118,9 @@ export const authMachine = Machine<
       },
       performSignin: async (ctx, event) => {
         let payload = event;
+        console.log(payload);
         try {
-          const resp = await axios.post(`${backendRoute}/login`, payload);
+          const resp = await axios.post(`${backendRoute}/signin`, payload);
           if (resp.data) {
             // console.log(resp.data);
             Navigate.push("/");
