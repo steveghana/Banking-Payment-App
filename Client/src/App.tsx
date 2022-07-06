@@ -16,36 +16,34 @@ function App() {
   return (
     <div className="App">
       <CssBaseline />
-      <Router>
-        {isLoggedIn && (
-          <AuthorizedRoute isLoggedIn={isLoggedIn} authService={authService} />
-        )}
-        {authstate.matches("unauthorized") && (
+      {authstate.matches("unauthorized") && isLoggedIn ? (
+        <AuthorizedRoute isLoggedIn={isLoggedIn} authService={authService} />
+      ) : (
+        <Grid
+          container
+          style={{ height: "100vh", width: "100%" }}
+          justifyContent="center"
+          alignItems="center"
+        >
           <Grid
-            container
-            style={{ height: "100vh", width: "100%" }}
-            justifyContent="center"
-            alignItems="center"
+            item
+            style={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
           >
-            <Grid
-              item
+            <div
               style={{
-                height: "100%",
                 display: "flex",
-                flexDirection: "column",
                 justifyContent: "center",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <SvgRwaLogo />
-              </div>
-              <Routes>
-                {/* <Route path="/"> */}
+              <SvgRwaLogo />
+            </div>
+            <Routes>
+              <Route path="/">
                 <Route
                   index
                   element={
@@ -62,19 +60,17 @@ function App() {
                     <SignIn authstate={authstate} authService={authService} />
                   }
                 />
-                {/* </Route> */}
-                <Route
-                  path="/*"
-                  element={
-                    <SignIn authstate={authstate} authService={authService} />
-                  }
-                />
-              </Routes>
-            </Grid>
+              </Route>
+              <Route
+                path="/*"
+                element={
+                  <SignIn authstate={authstate} authService={authService} />
+                }
+              />
+            </Routes>
           </Grid>
-        )}
-        {/* )} */}
-      </Router>
+        </Grid>
+      )}
     </div>
   );
 }
