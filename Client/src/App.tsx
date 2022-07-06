@@ -9,6 +9,7 @@ import { Container, CssBaseline, Grid, makeStyles } from "@material-ui/core";
 import Signup from "./components/SignUp";
 function App() {
   const [authstate] = useActor(authService);
+
   let isLoggedIn = authstate.matches("authorized");
   console.log(isLoggedIn);
 
@@ -16,57 +17,63 @@ function App() {
     <div className="App">
       <CssBaseline />
       <Router>
-        {isLoggedIn ? (
-          <AuthorizedRoute />
-        ) : (
-          authstate.matches("unauthorized") && (
+        {isLoggedIn && (
+          <AuthorizedRoute isLoggedIn={isLoggedIn} authService={authService} />
+        )}
+        {authstate.matches("unauthorized") && (
+          <Grid
+            container
+            style={{ height: "100vh", width: "100%" }}
+            justifyContent="center"
+            alignItems="center"
+          >
             <Grid
-              container
-              style={{ height: "100vh", width: "100%" }}
-              justifyContent="center"
-              alignItems="center"
+              item
+              style={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
             >
-              <Grid
-                item
+              <div
                 style={{
-                  height: "100%",
                   display: "flex",
-                  flexDirection: "column",
                   justifyContent: "center",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <SvgRwaLogo />
-                </div>
-                <Routes>
-                  <Route path="/">
-                    <Route
-                      index
-                      element={<SignIn authService={authService} />}
-                    />
-                    <Route
-                      path="signup"
-                      element={<Signup authService={authService} />}
-                    />
-                    <Route
-                      path="signin"
-                      element={<SignIn authService={authService} />}
-                    />
-                  </Route>
-                  <Route
-                    path="*"
-                    element={<SignIn authService={authService} />}
-                  />
-                </Routes>
-              </Grid>
+                <SvgRwaLogo />
+              </div>
+              <Routes>
+                {/* <Route path="/"> */}
+                <Route
+                  index
+                  element={
+                    <SignIn authstate={authstate} authService={authService} />
+                  }
+                />
+                <Route
+                  path="/signup"
+                  element={<Signup authService={authService} />}
+                />
+                <Route
+                  path="/signin"
+                  element={
+                    <SignIn authstate={authstate} authService={authService} />
+                  }
+                />
+                {/* </Route> */}
+                <Route
+                  path="/*"
+                  element={
+                    <SignIn authstate={authstate} authService={authService} />
+                  }
+                />
+              </Routes>
             </Grid>
-          )
+          </Grid>
         )}
+        {/* )} */}
       </Router>
     </div>
   );

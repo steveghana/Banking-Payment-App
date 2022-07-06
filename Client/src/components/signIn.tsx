@@ -1,7 +1,11 @@
 import React from "react";
 import { Form, Formik, Field, FieldProps, FormikHelpers } from "formik";
 import { Link } from "react-router-dom";
-import { AuthMachineEvents } from "../Machines/AuthMachine";
+import {
+  AuthMachineContext,
+  AuthMachineEvents,
+  AuthMachineSchema,
+} from "../Machines/AuthMachine";
 import { Alert } from "@material-ui/lab";
 import {
   Container,
@@ -17,7 +21,14 @@ import {
 } from "@material-ui/core";
 import { object, string, ref } from "yup";
 import { SignInPayload } from "../models/user";
-import { Interpreter } from "xstate";
+import {
+  BaseActionObject,
+  Interpreter,
+  ResolveTypegenMeta,
+  ServiceMap,
+  State,
+  TypegenDisabled,
+} from "xstate";
 import { useActor } from "@xstate/react";
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -52,9 +63,23 @@ const validationSchema = object({
 });
 interface Props {
   authService: any;
+  authstate: State<
+    AuthMachineContext,
+    AuthMachineEvents,
+    AuthMachineSchema,
+    any,
+    ResolveTypegenMeta<
+      TypegenDisabled,
+      AuthMachineEvents,
+      BaseActionObject,
+      ServiceMap
+    >
+  >;
+  // State<AuthMachineContext, AuthMachineEvents, AuthMachineSchema, any, ResolveTypegenMeta<TypegenDisabled, AuthMachineEvents, BaseActionObject, ServiceMap>>;
 }
-const SignIn: React.FC<Props> = ({ authService }) => {
+const SignIn: React.FC<Props> = ({ authService, authstate }) => {
   const classes = useStyles();
+  console.log(authstate.context.message);
   const [, send] = useActor(authService);
   const initialValues: SignInPayload = {
     userName: "",
@@ -68,15 +93,15 @@ const SignIn: React.FC<Props> = ({ authService }) => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        {/* {authState.context?.message && ( */}
-        <Alert
-          data-test="signin-error"
-          severity="error"
-          className={classes.alertMessage}
-        >
-          {"Sign in"}
-        </Alert>
-        {/* )} */}
+        {authstate.context?.message && (
+          <Alert
+            data-test="signin-error"
+            severity="error"
+            className={classes.alertMessage}
+          >
+            {authstate.context.message}
+          </Alert>
+        )}
         <div>{/* <RWALogo className={classes.logo} /> */}</div>
         <Typography component="h1" variant="h5">
           Sign in
