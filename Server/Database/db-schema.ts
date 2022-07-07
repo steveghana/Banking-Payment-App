@@ -6,7 +6,7 @@ import {
 } from "../Models/models";
 
 export interface DBModel {
-  user: User[];
+  users: User[];
   bankAccout: BankAccount[];
   contacts: Contact[];
 }

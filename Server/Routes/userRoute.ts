@@ -64,11 +64,11 @@ router.post(
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/signin",
+    failureMessage: true,
+    failureFlash: true,
   }),
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const user: User = req.body;
-    console.log(req.body);
-
     // if (req.body.remember) {
     //   req.session!.cookie.maxAge = 24 * 60 * 60 * 1000 * 30; // Expire in 30 days
     // } else {
@@ -77,7 +77,7 @@ router.post(
     // console.log(user);
     // bcryptjs.hash(req.body.password, 12);
     // userDb.push(user);
-    res.json({ user });
+    // res.json({ user: req.user });
   }
 );
 

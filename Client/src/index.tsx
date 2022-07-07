@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserHistory } from "history";
-import { Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 // import "./styles/Index.scss";
 import App from "./App";
 import { ContextProvider } from "./context/context";
@@ -14,7 +14,9 @@ const history = createBrowserHistory();
 root.render(
   <React.StrictMode>
     {/* <ContextProvider> */}
-    <App />
+    <Router>
+      <App />
+    </Router>
     {/* </ContextProvider> */}
   </React.StrictMode>
 );
