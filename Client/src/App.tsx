@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import AuthorizedRoute from "./components/AuthorizedRoute";
 import { useActor, useMachine } from "@xstate/react";
 import { authService, authMachine } from "./Machines/AuthMachine";
@@ -9,14 +14,19 @@ import { Container, CssBaseline, Grid, makeStyles } from "@material-ui/core";
 import Signup from "./components/SignUp";
 function App() {
   const [authstate] = useActor(authService);
-
+  const navigate = useNavigate();
   let isLoggedIn = authstate.matches("authorized");
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/signin");
+    }
+  }, [isLoggedIn]);
   console.log(isLoggedIn);
 
   return (
     <div className="App">
       <CssBaseline />
-      {authstate.matches("unauthorized") && isLoggedIn ? (
+      {authstate.matches("authorized") && isLoggedIn ? (
         <AuthorizedRoute isLoggedIn={isLoggedIn} authService={authService} />
       ) : (
         <Grid
@@ -43,26 +53,12 @@ function App() {
               <SvgRwaLogo />
             </div>
             <Routes>
-              <Route path="/">
-                <Route
-                  index
-                  element={
-                    <SignIn authstate={authstate} authService={authService} />
-                  }
-                />
-                <Route
-                  path="/signup"
-                  element={<Signup authService={authService} />}
-                />
-                <Route
-                  path="/signin"
-                  element={
-                    <SignIn authstate={authstate} authService={authService} />
-                  }
-                />
-              </Route>
               <Route
-                path="/*"
+                path="/signup"
+                element={<Signup authService={authService} />}
+              />
+              <Route
+                path="/signin"
                 element={
                   <SignIn authstate={authstate} authService={authService} />
                 }

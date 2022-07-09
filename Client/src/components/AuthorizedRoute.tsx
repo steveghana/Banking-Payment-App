@@ -36,7 +36,7 @@ const AuthorizedRoute: React.FC<Props> = ({ isLoggedIn, authService }) => {
     // <Home />
     <MainLayout authService={authService}>
       {/* <Routes> */}
-      <PrivateRoute isLoggedIn={isLoggedIn}>
+      <PrivateRoute isLoggedIn={isLoggedIn} path="/">
         <Home />
       </PrivateRoute>
       {/* </Routes> */}

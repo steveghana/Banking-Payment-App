@@ -42,6 +42,7 @@ export interface AuthMachineContext {
   user?: User;
   message?: string;
 }
+let customError: string;
 
 export const authMachine = Machine<
   AuthMachineContext,
@@ -111,7 +112,9 @@ export const authMachine = Machine<
         let payload = event;
         const resp = await axios.post(`${backendRoute}/signup`, payload);
         console.log(resp);
-        if (resp.data) {
+        if (resp.data?.message) {
+          customError = resp.data?.message;
+        } else {
           Navigate.push("/signin");
           window.location.reload();
         }
@@ -122,7 +125,6 @@ export const authMachine = Machine<
         try {
           const resp = await axios.post(`${backendRoute}/signin`, payload);
           if (resp.data) {
-            // console.log(resp.data);
             Navigate.push("/");
             window.location.reload();
           }
@@ -147,7 +149,7 @@ export const authMachine = Machine<
       })),
       onSuccess: assign((ctx: any, event: any) => ({
         user: event?.data?.user,
-        message: undefined,
+        message: customError || undefined,
       })),
       onError: assign((ctx: any, event: any) => ({
         message: event?.data?.message,

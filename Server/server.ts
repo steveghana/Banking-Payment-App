@@ -8,32 +8,15 @@ import path from "path";
 import fs from "fs";
 import FileSync from "lowdb/adapters/FileSync";
 import { DBModel } from "./Database/db-schema";
-import { JSONFile, Low, LowSync } from "lowdb";
+import low from "lowdb";
 import userRoute from "./Routes/userRoute";
 import dotenv from "dotenv";
-// import { graphqlHTTP } from "express-graphql";
 dotenv.config();
-
 const app = express();
-// const dbFille = fs.readFileSync(
-//   path.join(process.cwd(), "data", "database.json"),
-//   "utf-8"
-// );
+const adapter = new FileSync<DBModel>("db.json");
+export const db = low(adapter);
+db.defaults({ users: [], bankAccouts: [] }).write();
 
-// const adapter = new JSONFile<Adapter<DBModel>>(dbFille);
-
-// export const db = new Low<Adapter<DBModel>>(adapter);
-type Data = {
-  posts: string[];
-};
-const adapter = new JSONFile<Data>("db.json");
-const db = new Low<Data>(adapter);
-
-// (async () => {
-//   const file =
-//   const db = await new Low<DBModel>()
-//   // await db.read();
-// })();
 console.log(db);
 
 initialiser(passport);
