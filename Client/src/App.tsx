@@ -55,12 +55,22 @@ function App() {
             <Routes>
               <Route
                 path="/signup"
-                element={<Signup authService={authService} />}
+                element={
+                  <Signup
+                    authService={authService}
+                    authstate={authstate}
+                    isLoggedIn={isLoggedIn}
+                  />
+                }
               />
               <Route
                 path="/signin"
                 element={
-                  <SignIn authstate={authstate} authService={authService} />
+                  <SignIn
+                    authstate={authstate}
+                    authService={authService}
+                    isLoggedIn={isLoggedIn}
+                  />
                 }
               />
             </Routes>

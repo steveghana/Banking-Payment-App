@@ -29,18 +29,13 @@ export interface AuthMachineSchema {
 
 export type AuthMachineEvents =
   | { type: "SIGNIN" }
-  // | { type: "LOGOUT" }
-  // | { type: "UPDATE" }
   | { type: "REFRESH" }
-  // | { type: "AUTH0" }
-  // | { type: "COGNITO" }
-  // | { type: "OKTA" }
-  // | { type: "GOOGLE" }
   | { type: "SIGNUP" };
 
 export interface AuthMachineContext {
   user?: User;
   message?: string;
+  serverError?: string;
 }
 let customError: string;
 
@@ -56,6 +51,7 @@ export const authMachine = Machine<
       // used to determine the user and message from actions
       user: undefined,
       message: undefined,
+      serverError: undefined,
     },
     states: {
       unauthorized: {
@@ -112,8 +108,9 @@ export const authMachine = Machine<
         let payload = event;
         const resp = await axios.post(`${backendRoute}/signup`, payload);
         console.log(resp);
-        if (resp.data?.message) {
-          customError = resp.data?.message;
+        if (resp.data?.signupError) {
+          customError = resp.data;
+          console.log(customError);
         } else {
           Navigate.push("/signin");
           window.location.reload();
@@ -152,7 +149,7 @@ export const authMachine = Machine<
         message: customError || undefined,
       })),
       onError: assign((ctx: any, event: any) => ({
-        message: event?.data?.message,
+        serverError: event?.data?.message,
       })),
     },
   }

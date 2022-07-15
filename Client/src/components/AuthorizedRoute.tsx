@@ -6,7 +6,7 @@ import {
   AuthMachineSchema,
   AuthMachineContext,
 } from "../Machines/AuthMachine";
-import { Route, Routes } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Interpreter,
   ResolveTypegenMeta,
@@ -15,7 +15,6 @@ import {
   ServiceMap,
 } from "xstate";
 import PrivateRoute from "./PrivateRoute";
-import { Navigator } from "react-router-dom";
 interface Props {
   isLoggedIn: boolean;
   authService: Interpreter<
@@ -32,6 +31,12 @@ interface Props {
   >;
 }
 const AuthorizedRoute: React.FC<Props> = ({ isLoggedIn, authService }) => {
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, []);
   return (
     // <Home />
     <MainLayout authService={authService}>

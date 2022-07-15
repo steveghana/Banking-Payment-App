@@ -30,6 +30,7 @@ import {
   TypegenDisabled,
 } from "xstate";
 import { useActor } from "@xstate/react";
+import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -63,6 +64,7 @@ const validationSchema = object({
 });
 interface Props {
   authService: any;
+  isLoggedIn: boolean;
   authstate: State<
     AuthMachineContext,
     AuthMachineEvents,
@@ -77,23 +79,30 @@ interface Props {
   >;
   // State<AuthMachineContext, AuthMachineEvents, AuthMachineSchema, any, ResolveTypegenMeta<TypegenDisabled, AuthMachineEvents, BaseActionObject, ServiceMap>>;
 }
-const SignIn: React.FC<Props> = ({ authService, authstate }) => {
+const SignIn: React.FC<Props> = ({ authService, authstate, isLoggedIn }) => {
   const classes = useStyles();
-  console.log(authstate.context.message);
+  const navigate = useNavigate();
   const [, send] = useActor(authService);
+
   const initialValues: SignInPayload = {
     userName: "",
     password: "",
     remember: undefined,
   };
-
+  // let serverErrorMessage = authstate.context.serverError;
+  // let customeErrorMessage = authstate.context.message;
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, []);
   let pendingSignIn = (payload: SignInPayload) =>
     send({ type: "SIGNIN", ...payload });
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        {authstate.context?.message && (
+        {/* {authstate.context.message && (
           <Alert
             data-test="signin-error"
             severity="error"
@@ -101,7 +110,7 @@ const SignIn: React.FC<Props> = ({ authService, authstate }) => {
           >
             {authstate.context.message}
           </Alert>
-        )}
+        )} */}
         <div>{/* <RWALogo className={classes.logo} /> */}</div>
         <Typography component="h1" variant="h5">
           Sign in

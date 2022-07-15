@@ -9,7 +9,7 @@ export interface User {
   uuid?: string;
   firstName: string;
   lastName: string;
-  username: string;
+  userName: string;
   password: string;
   email: string;
   phoneNumber?: string;
