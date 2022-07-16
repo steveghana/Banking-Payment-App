@@ -1,0 +1,15 @@
+{
+  "users": [
+    {
+      "id": "b7V7YVOXU",
+      "uuid": "5755bf77-10b1-4367-bcf9-bebe4e3dc30d",
+      "email": "boatengstephen707@gmail.com",
+      "userName": "dude",
+      "firstName": "stephen",
+      "lastName": "Williams",
+      "password": "$2a$10$mhmkaFxOFZT8csdo/5ODq.cyqo7EksEfZGm1O2Nm/LI0gMRRxtzy6",
+      "createdAt": "2022-07-15T06:18:11.673Z"
+    }
+  ],
+  "bankAccouts": []
+}

@@ -8,20 +8,19 @@ import { getUser } from "../util/helper";
 import { userValidator } from "./validators";
 import { validateMiddleware } from "./middleware";
 const router = express.Router();
-
 router.post(
   "/signup",
   userValidator,
   validateMiddleware(userValidator),
   async (req: Request, res: Response) => {
-    const { userName } = req.body;
+    const { userName, firstName } = req.body;
     try {
-      const user = getUser("users", userName);
-      if (user) {
-        res.json({ message: "User already exist, try signing in" });
+      const user = getUser("firstName", firstName);
+      if (user.length) {
+        res.json({ signupError: "User already exist, try signing in" });
         return;
       }
-      const addedUser = addUser(req.body);
+      const addedUser = await addUser(req.body);
       if (addedUser) {
         const token = jwt.sign(req.body, "secret");
         res.status(200).json({ user: addUser, token });
@@ -49,10 +48,8 @@ router.post(
     } else {
       req.session!.cookie.expires = undefined;
     }
-    // console.log(user);
-    // bcryptjs.hash(req.body.password, 12);
-    // userDb.push(user);
-    res.json({ user: req.user });
+
+    res.status(200).json({ user: req.user });
   }
 );
 

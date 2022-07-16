@@ -13,12 +13,21 @@ import userRoute from "./Routes/userRoute";
 import dotenv from "dotenv";
 dotenv.config();
 const app = express();
-const adapter = new FileSync<DBModel>("db.json");
+let file = path.join(__dirname, "./data/data.json");
+const adapter = new FileSync<DBModel>(file);
 export const db = low(adapter);
-db.defaults({ users: [], bankAccouts: [] }).write();
+export const seedDatabase = () => {
+  const testSeed = JSON.parse(
+    fs.readFileSync(
+      path.join(process.cwd(), "data", "database-seed.json"),
+      "utf-8"
+    )
+  );
 
-console.log(db);
-
+  // seed database with test data
+  db.setState(testSeed).write();
+  return;
+};
 initialiser(passport);
 app.use(logger("dev"));
 app.use(

@@ -1,6 +1,7 @@
 import React from "react";
+import { Alert } from "@material-ui/lab";
 import { Form, Formik, Field, FieldProps, FormikHelpers } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Container,
   makeStyles,
@@ -11,10 +12,7 @@ import {
   Box,
   Grid,
 } from "@material-ui/core";
-import { AuthMachineEvents, StateProps } from "../Machines/AuthMachine";
 import { useActor } from "@xstate/react";
-import { EventObject, Interpreter } from "xstate";
-import { authMachine } from "../Machines/AuthMachine";
 import { object, string, ref } from "yup";
 import { SignUpPayload } from "../models/user";
 
@@ -53,11 +51,19 @@ const validationSchema = object({
 });
 interface SignupProps {
   authService: any;
+  authstate: any;
+  isLoggedIn: boolean;
 }
 
-const Signup: React.FC<SignupProps> = ({ authService }) => {
+const Signup: React.FC<SignupProps> = ({
+  authService,
+  authstate,
+  isLoggedIn,
+}) => {
   const classes = useStyles();
   const [, send] = useActor(authService);
+  let serverErrorMessage = authstate.context.serverError;
+  let customeErrorMessage = authstate.context.message;
   const initialValues: SignUpPayload = {
     firstName: "",
     password: "",
@@ -66,12 +72,27 @@ const Signup: React.FC<SignupProps> = ({ authService }) => {
     lastName: "",
     confirmPassword: "",
   };
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, []);
   let pendingSignUp = (payload: SignUpPayload) =>
     send({ type: "SIGNUP", ...payload });
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+        {(customeErrorMessage.signupError || serverErrorMessage) && (
+          <Alert
+            data-test="signin-error"
+            severity="error"
+            className={classes.alertMessage}
+          >
+            {customeErrorMessage.signupError || serverErrorMessage}
+          </Alert>
+        )}
         <div>{/* <RWALogo className={classes.logo} /> */}</div>
         <Typography component="h1" variant="h5" data-test="signup-title">
           Sign Up
