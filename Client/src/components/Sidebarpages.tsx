@@ -11,9 +11,12 @@ const pageStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     width: "100%",
+    gap: "2rem",
+    height: "100px",
+    // justifyContent:'space-evenly'
   },
   pageName: {
-    margin: "0 auto 0 auto",
+    // margin: "0 auto 0 auto",
   },
 }));
 const Sidebarpages: React.FC<Props> = ({ pageName, Icon }) => {
