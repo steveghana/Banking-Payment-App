@@ -54,21 +54,21 @@ function App() {
             </div>
             <Routes>
               <Route
-                path="/signup"
-                element={
-                  <Signup
-                    authService={authService}
-                    authstate={authstate}
-                    isLoggedIn={isLoggedIn}
-                  />
-                }
-              />
-              <Route
                 path="/signin"
                 element={
                   <SignIn
                     authstate={authstate}
                     authService={authService}
+                    isLoggedIn={isLoggedIn}
+                  />
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <Signup
+                    authService={authService}
+                    authstate={authstate}
                     isLoggedIn={isLoggedIn}
                   />
                 }

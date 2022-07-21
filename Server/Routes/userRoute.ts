@@ -15,9 +15,12 @@ router.post(
   async (req: Request, res: Response) => {
     const { userName, firstName } = req.body;
     try {
-      const user = getUser("firstName", firstName);
+      const user = getUser("userName", userName);
       if (user.length) {
-        res.json({ signupError: "User already exist, try signing in" });
+        res.status(400).json({
+          signupError: "User already exist, try signing in",
+          custom: true,
+        });
         return;
       }
       const addedUser = await addUser(req.body);
@@ -35,21 +38,30 @@ router.post(
   "/signin",
   userValidator,
   validateMiddleware(userValidator),
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/signin",
-    failureMessage: true,
-    failureFlash: true,
-  }),
+
   async (req: Request, res: Response) => {
     const user: User = req.body;
-    if (req.body.remember) {
-      req.session!.cookie.maxAge = 24 * 60 * 60 * 1000 * 30; // Expire in 30 days
-    } else {
-      req.session!.cookie.expires = undefined;
-    }
-
-    res.status(200).json({ user: req.user });
+    passport.authenticate("local", (err, user) => {
+      try {
+        if (err === "User Signin Error") {
+          res
+            .status(400)
+            .json({ signInError: "User doesn't exist, try sign up" });
+        } else if (err === "Invalid Password Error") {
+          res.status(400).json({ signInError: "Invalid Password" });
+        } else {
+          if (req.body.remember) {
+            req.session!.cookie.maxAge = 24 * 60 * 60 * 1000 * 30; // Expire in 30 days
+          } else {
+            req.session!.cookie.expires = undefined;
+          }
+          res.status(200).json({ user });
+        }
+      } catch (error: any) {
+        throw new Error(error.message);
+      }
+    })(req, res);
+    // console.log(req.logIn);
   }
 );
 

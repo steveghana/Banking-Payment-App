@@ -9,20 +9,21 @@ export const initialiser = (passport: PassportStatic) => {
     new LocalStrategy(
       { usernameField: "userName" },
       async (userName: string, password: string, done: Function) => {
-        const user = getUser("userName", userName);
-        console.log(user);
-        if (user === null) {
-          done(null, false, { message: "User doesn't exist, try signin up" });
-          return;
+        try {
+          const user = getUser("userName", userName);
+          if (user.length < 1) {
+            done("User Signin Error");
+            return;
+          }
+          const comparepass = await bcrypt.compare(password, user[0]?.password);
+          if (comparepass === false) {
+            done("Invalid Password Error");
+            return;
+          }
+          return done(null, user);
+        } catch (error: any) {
+          throw new Error(error.message);
         }
-        // console.log(password)
-        const comparepass = await bcrypt.compare(password, user[0]?.password);
-        console.log(comparepass);
-        if (!comparepass) {
-          done(null, false, { message: "Invalid password" });
-          return;
-        }
-        return done(null, user);
       }
     )
   );

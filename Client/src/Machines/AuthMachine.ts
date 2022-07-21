@@ -18,7 +18,6 @@ export interface AuthMachineSchema {
     unauthorized: {};
     signup: {};
     signin: {};
-    // loading: {};
     // updating: {};
     // logout: {};
     refreshing: {};
@@ -27,6 +26,15 @@ export interface AuthMachineSchema {
   };
 }
 
+const getError = (data: any) => {
+  let message = null;
+  if (data.response.status === 400) {
+    message = data.response.data;
+  } else {
+    message = data;
+  }
+  return message;
+};
 export type AuthMachineEvents =
   | { type: "SIGNIN" }
   | { type: "REFRESH" }
@@ -37,7 +45,6 @@ export interface AuthMachineContext {
   message?: string;
   serverError?: string;
 }
-let customError: string;
 
 export const authMachine = Machine<
   AuthMachineContext,
@@ -107,20 +114,17 @@ export const authMachine = Machine<
       performSignup: async (ctx, event) => {
         let payload = event;
         const resp = await axios.post(`${backendRoute}/signup`, payload);
-        console.log(resp);
-        if (resp.data?.signupError) {
-          customError = resp.data;
-          console.log(customError);
-        } else {
+
+        if (resp.data) {
           Navigate.push("/signin");
           window.location.reload();
         }
       },
       performSignin: async (ctx, event) => {
         let payload = event;
-        console.log(payload);
+        const resp = await axios.post(`${backendRoute}/signin`, payload);
+
         try {
-          const resp = await axios.post(`${backendRoute}/signin`, payload);
           if (resp.data) {
             Navigate.push("/");
             window.location.reload();
@@ -136,7 +140,7 @@ export const authMachine = Machine<
     },
     actions: {
       returnHomeAfterLigin: async (ctx, event) => {
-        if (window.location.pathname === "/signin") {
+        if (window.location.pathname === "/signpup") {
           window.location.pathname = "/";
           window.location.reload();
         }
@@ -146,10 +150,10 @@ export const authMachine = Machine<
       })),
       onSuccess: assign((ctx: any, event: any) => ({
         user: event?.data?.user,
-        message: customError || undefined,
+        message: event.data?.message || undefined,
       })),
       onError: assign((ctx: any, event: any) => ({
-        serverError: event?.data?.message,
+        serverError: getError(event?.data),
       })),
     },
   }

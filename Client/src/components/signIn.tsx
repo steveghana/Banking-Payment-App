@@ -63,20 +63,9 @@ const validationSchema = object({
     .required("Please enter a valid password"),
 });
 interface Props {
-  authService: any;
+  authService?: any;
   isLoggedIn: boolean;
-  authstate: State<
-    AuthMachineContext,
-    AuthMachineEvents,
-    AuthMachineSchema,
-    any,
-    ResolveTypegenMeta<
-      TypegenDisabled,
-      AuthMachineEvents,
-      BaseActionObject,
-      ServiceMap
-    >
-  >;
+  authstate?: any;
   // State<AuthMachineContext, AuthMachineEvents, AuthMachineSchema, any, ResolveTypegenMeta<TypegenDisabled, AuthMachineEvents, BaseActionObject, ServiceMap>>;
 }
 const SignIn: React.FC<Props> = ({ authService, authstate, isLoggedIn }) => {
@@ -89,8 +78,8 @@ const SignIn: React.FC<Props> = ({ authService, authstate, isLoggedIn }) => {
     password: "",
     remember: undefined,
   };
-  // let serverErrorMessage = authstate.context.serverError;
-  // let customeErrorMessage = authstate.context.message;
+  let NetworkError = authstate.context?.serverError?.message;
+  let customeErrorMessage = authstate.context.serverError?.signInError;
   React.useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
@@ -102,15 +91,15 @@ const SignIn: React.FC<Props> = ({ authService, authstate, isLoggedIn }) => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        {/* {authstate.context.message && (
+        {(NetworkError || customeErrorMessage) && (
           <Alert
             data-test="signin-error"
             severity="error"
             className={classes.alertMessage}
           >
-            {authstate.context.message}
+            {NetworkError || customeErrorMessage}
           </Alert>
-        )} */}
+        )}
         <div>{/* <RWALogo className={classes.logo} /> */}</div>
         <Typography component="h1" variant="h5">
           Sign in

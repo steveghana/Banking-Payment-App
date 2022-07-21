@@ -18,7 +18,7 @@ function PrivateRoute({ isLoggedIn, children, ...rest }: IPrivateRouteProps) {
             /* istanbul ignore next */
             <Navigate
               to={{
-                pathname: "/signin",
+                pathname: "/signup",
               }}
             />
           )
