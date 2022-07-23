@@ -62,7 +62,7 @@ const Signup: React.FC<SignupProps> = ({
 }) => {
   const classes = useStyles();
   const [, send] = useActor(authService);
-  let serverErrorMessage = authstate.context.serverError;
+  let serverErrorMessage = authstate.context?.serverError;
   let customeErrorMessage = authstate.context.message;
   const initialValues: SignUpPayload = {
     firstName: "",
@@ -79,18 +79,18 @@ const Signup: React.FC<SignupProps> = ({
     }
   }, []);
   let pendingSignUp = (payload: SignUpPayload) =>
-    send({ type: "SIGNUP", ...payload });
+    send({ type: "LOADING", ...payload });
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        {(customeErrorMessage.signupError || serverErrorMessage) && (
+        {(customeErrorMessage?.signupError || serverErrorMessage) && (
           <Alert
             data-test="signin-error"
             severity="error"
             className={classes.alertMessage}
           >
-            {customeErrorMessage.signupError || serverErrorMessage}
+            {customeErrorMessage?.signupError || serverErrorMessage}
           </Alert>
         )}
         <div>{/* <RWALogo className={classes.logo} /> */}</div>

@@ -5,6 +5,7 @@ import {
   AuthMachineContext,
 } from "../Machines/AuthMachine";
 import Navigation from "./Navigation";
+import Sidebar from "./Sidebar";
 import {
   Interpreter,
   ResolveTypegenMeta,
@@ -48,7 +49,9 @@ const MainLayout: React.FC<Props> = ({ authService, children }) => {
   const classes = mainStyles();
   return (
     <div className={classes.layout_container}>
-      <div className={classes.sidebar}></div>
+      <div className={classes.sidebar}>
+        <Sidebar />
+      </div>
       <div className={classes.main}>
         <div className="nav">
           <Navigation />
