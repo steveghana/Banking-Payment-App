@@ -13,7 +13,7 @@ router.post(
   userValidator,
   validateMiddleware(userValidator),
   async (req: Request, res: Response) => {
-    const { userName, firstName } = req.body;
+    const { userName } = req.body;
     try {
       const user = getUser("userName", userName);
       if (user.length) {
@@ -61,7 +61,6 @@ router.post(
         throw new Error(error.message);
       }
     })(req, res);
-    // console.log(req.logIn);
   }
 );
 
