@@ -18,9 +18,10 @@ const mainStyles = makeStyles((theme) => ({
   layout_container: {
     display: "flex",
     height: "100vh",
+    overflow: "hidden",
   },
   sidebar: {
-    minWidth: "18%",
+    minWidth: "20%",
     background: "white",
     height: "100%",
   },
@@ -46,15 +47,22 @@ interface Props {
   children: React.ReactNode;
 }
 const MainLayout: React.FC<Props> = ({ authService, children }) => {
+  const [toggle, settoggle] = React.useState(false);
   const classes = mainStyles();
   return (
     <div className={classes.layout_container}>
-      <div className={classes.sidebar}>
+      <div
+        className={classes.sidebar}
+        style={{
+          marginLeft: toggle ? "0%" : "-20%",
+          transition: "400ms ease",
+        }}
+      >
         <Sidebar />
       </div>
       <div className={classes.main}>
         <div className="nav">
-          <Navigation />
+          <Navigation settoggle={settoggle} />
         </div>
         <div>{children}</div>
       </div>

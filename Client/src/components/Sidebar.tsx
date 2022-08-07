@@ -34,10 +34,10 @@ const sidebarStyles = makeStyles((theme) => ({
     flexDirection: "column",
     height: "100%",
     // justifyContent: "space-evenly",
-    margin: theme.spacing(0, 0, 0, 2),
+    margin: theme.spacing(2, 0, 0, 2),
   },
 }));
-function Sidebar() {
+const Sidebar: React.FC<{}> = () => {
   const classes = sidebarStyles();
   return (
     <div className={classes.container}>
@@ -51,15 +51,27 @@ function Sidebar() {
       <div className={classes.accountinfo}></div>
       <div className={classes.pages}>
         <div className={classes.page_container}>
-          <Sidebarpages pageName="Dashboard" Icon={Dashboard} />
-          <Sidebarpages pageName="My Accounts" Icon={PersonOutline} />
-          <Sidebarpages pageName="Bank Account" Icon={Museum} />
-          <Sidebarpages pageName="Notifications" Icon={Notifications} />
-          <Sidebarpages pageName="Log out" Icon={CloseRounded} />
+          <Sidebarpages pageName="Dashboard" Icon={Dashboard} to={"/"} />
+          <Sidebarpages
+            pageName="My Accounts"
+            Icon={PersonOutline}
+            to={"/myaccount"}
+          />
+          <Sidebarpages
+            pageName="Bank Account"
+            Icon={Museum}
+            to={"/bankaccounts"}
+          />
+          <Sidebarpages
+            pageName="Notifications"
+            Icon={Notifications}
+            to={"/notification"}
+          />
+          <Sidebarpages pageName="Log out" Icon={CloseRounded} to={"/logout"} />
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Sidebar;

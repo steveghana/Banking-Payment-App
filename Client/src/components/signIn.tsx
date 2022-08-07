@@ -1,11 +1,6 @@
 import React from "react";
 import { Form, Formik, Field, FieldProps, FormikHelpers } from "formik";
 import { Link } from "react-router-dom";
-import {
-  AuthMachineContext,
-  AuthMachineEvents,
-  AuthMachineSchema,
-} from "../Machines/AuthMachine";
 import { Alert } from "@material-ui/lab";
 import {
   Container,
@@ -19,16 +14,8 @@ import {
   Grid,
   Box,
 } from "@material-ui/core";
-import { object, string, ref } from "yup";
+import { object, string } from "yup";
 import { SignInPayload } from "../models/user";
-import {
-  BaseActionObject,
-  Interpreter,
-  ResolveTypegenMeta,
-  ServiceMap,
-  State,
-  TypegenDisabled,
-} from "xstate";
 import { useActor } from "@xstate/react";
 import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
@@ -52,10 +39,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
 }));
-type FormValues = {
-  userName: string;
-  password: string;
-};
+
 const validationSchema = object({
   userName: string().required("UserName is required"),
   password: string()
