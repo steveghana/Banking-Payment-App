@@ -1,8 +1,6 @@
 import { omit } from "lodash/fp";
-import { dataMachine } from "./dataMachine";
+// import { dataMachine } from "./dataMachine";
 import axios from "axios";
-// import { axios } from "../utils/asyncUtils";
-// import { backendPort } from "../utils/";
 let backendPort = 5000;
 const listBankAccountQuery = gql`
   query ListBankAccount {
