@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Navigate, RouteProps, Routes } from "react-router-dom";
 
 interface IPrivateRouteProps extends RouteProps {
@@ -10,7 +9,6 @@ function PrivateRoute({ isLoggedIn, children, ...rest }: IPrivateRouteProps) {
     <Routes>
       <Route
         {...rest}
-        //   state= { from: location },
         element={
           isLoggedIn ? (
             children

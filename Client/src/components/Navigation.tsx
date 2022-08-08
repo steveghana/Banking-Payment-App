@@ -5,7 +5,7 @@ import SvgRwaLogo from "./SvgLogo";
 const navstyles = makeStyles((theme) => ({
   container: {
     background: theme.palette.primary.main,
-    padding: theme.spacing(3, 3, 0, 3),
+    padding: theme.spacing(2, 2, 0, 2),
     display: "flex",
     flexDirection: "column",
     gap: "2rem",
@@ -21,7 +21,7 @@ const navstyles = makeStyles((theme) => ({
     width: "100%",
     justifyContent: "center",
     gap: "2rem",
-    fontSize: "1.3rem",
+    fontSize: "1rem",
     color: "white",
   },
   notification: {
@@ -30,12 +30,17 @@ const navstyles = makeStyles((theme) => ({
     gap: ".2rem",
   },
 }));
-function Navigation() {
+const Navigation: React.FC<{
+  settoggle: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ settoggle }) => {
+  // const [toggle, settoggle] = React.useState(false);
+  let switchNav = () => settoggle((prev) => !prev);
+
   const classes = navstyles();
   return (
     <div className={classes.container}>
       <div className={classes.wrapper}>
-        <Menu style={{ color: "white" }} />
+        <Menu style={{ color: "white" }} onClick={switchNav} />
         <div className="logo">
           <div className="logo_image">
             <SvgRwaLogo style={{ color: "white" }} />
@@ -55,6 +60,6 @@ function Navigation() {
       </div>
     </div>
   );
-}
+};
 
 export default Navigation;

@@ -17,7 +17,7 @@ router.post(
     try {
       const user = getUser("userName", userName);
       if (user.length) {
-        res.status(400).json({
+        res.status(403).json({
           signupError: "User already exist, try signing in",
           custom: true,
         });

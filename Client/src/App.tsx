@@ -7,13 +7,18 @@ import {
 } from "react-router-dom";
 import AuthorizedRoute from "./components/AuthorizedRoute";
 import { useActor, useMachine } from "@xstate/react";
+import { snackbarMachine } from "./Machines/snackbarMachine";
+//@ts-ignore
 import { authService, authMachine } from "./Machines/AuthMachine";
+import { bankAccountsMachine } from "./Machines/bankAccountsMachine";
 import SignIn from "./components/signIn";
 import SvgRwaLogo from "./components/SvgLogo";
 import { Container, CssBaseline, Grid, makeStyles } from "@material-ui/core";
 import Signup from "./components/SignUp";
 function App() {
   const [authstate] = useActor(authService);
+  const [, , snackbarService] = useMachine(snackbarMachine);
+
   const navigate = useNavigate();
   let isLoggedIn = authstate.matches("authorized");
   React.useEffect(() => {
@@ -27,7 +32,11 @@ function App() {
     <div className="App">
       <CssBaseline />
       {authstate.matches("authorized") && isLoggedIn ? (
-        <AuthorizedRoute isLoggedIn={isLoggedIn} authService={authService} />
+        <AuthorizedRoute
+          isLoggedIn={isLoggedIn}
+          authService={authService}
+          snackbarService={snackbarService}
+        />
       ) : (
         <Grid
           container
