@@ -1,4 +1,4 @@
-// import { omit } from "lodash/fp";
+import { omit } from "lodash/fp";
 import { Machine, assign } from "xstate";
 //@ts-ignore
 import { dataMachine } from "./dataMachine";
