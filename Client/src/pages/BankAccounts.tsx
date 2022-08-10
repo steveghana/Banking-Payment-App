@@ -4,8 +4,8 @@ import { Interpreter } from "xstate";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import { makeStyles, Grid, Button, Paper, Typography } from "@material-ui/core";
 
-import { AuthMachineContext, AuthMachineEvents } from "../Machines/AuthMachine";
-import { DataContext, DataEvents } from "../Machines/dataMachine";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/AuthMachine";
+import { DataContext, DataEvents } from "../machines/dataMachine";
 import BankAccountForm from "../components/BankAccountForm";
 import BankAccountList from "../components/BankAccountList";
 
@@ -23,30 +23,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BankAccountsContainer: React.FC = (
-  {
-    // authService,
-    // bankAccountsService,
-  }
-) => {
+const BankAccountsContainer: React.FC<Props> = ({
+  authService,
+  bankAccountsService,
+}) => {
   const match = useParams();
   const classes = useStyles();
-  // const [authState] = useActor(authService);
-  // const [bankAccountsState, sendBankAccounts] = useActor(bankAccountsService);
+  const [authState] = useActor(authService);
+  const [bankAccountsState, sendBankAccounts] = useActor(bankAccountsService);
 
-  // const currentUser = authState?.context.user;
+  const currentUser = authState.context.user as string | any;
 
-  // const createBankAccount = (payload: any) => {
-  //   sendBankAccounts({ type: "CREATE", ...payload });
-  // };
+  const createBankAccount = (payload: any) => {
+    sendBankAccounts({ type: "CREATE", ...payload });
+  };
 
-  // const deleteBankAccount = (payload: any) => {
-  //   sendBankAccounts({ type: "DELETE", ...payload });
-  // };
+  const deleteBankAccount = (payload: any) => {
+    sendBankAccounts({ type: "DELETE", ...payload });
+  };
 
-  // useEffect(() => {
-  //   sendBankAccounts("FETCH");
-  // }, [sendBankAccounts]);
+  useEffect(() => {
+    sendBankAccounts("FETCH");
+  }, [sendBankAccounts]);
 
   if (match.url === "/bankaccounts/new") {
     return (
@@ -54,10 +52,10 @@ const BankAccountsContainer: React.FC = (
         <Typography component="h2" variant="h6" color="primary" gutterBottom>
           Create Bank Account
         </Typography>
-        {/* <BankAccountForm
-          // userId={currentUser?.id}
+        <BankAccountForm
+          userId={currentUser.id}
           createBankAccount={createBankAccount}
-        /> */}
+        />
       </Paper>
     );
   }
@@ -88,10 +86,10 @@ const BankAccountsContainer: React.FC = (
           </Button>
         </Grid>
       </Grid>
-      {/* <BankAccountList
+      <BankAccountList
         bankAccounts={bankAccountsState?.context.results!}
         deleteBankAccount={deleteBankAccount}
-      /> */}
+      />
     </Paper>
   );
 };
