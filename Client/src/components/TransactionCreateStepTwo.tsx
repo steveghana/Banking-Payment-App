@@ -96,13 +96,28 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
 
   return (
     <Paper className={classes.paper} elevation={0}>
-      <Box display="flex" height={200} alignItems="center" justifyContent="center">
-        <Grid container direction="column" justify="flex-start" alignItems="center">
+      <Box
+        display="flex"
+        height={200}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Grid
+          container
+          direction="column"
+          justify="flex-start"
+          alignItems="center"
+        >
           <Grid item>
             <Avatar src={receiver.avatar} />
           </Grid>
           <Grid item>
-            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+            <Typography
+              component="h2"
+              variant="h6"
+              color="primary"
+              gutterBottom
+            >
               {receiver.firstName} {receiver.lastName}
               {transactionType}
             </Typography>
@@ -130,7 +145,10 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
           {({ isValid, isSubmitting }) => (
             <Form className={classes.form} data-test="transaction-create-form">
               <Field name="amount">
-                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="dense"
@@ -141,7 +159,9 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     type="text"
                     placeholder="Amount"
                     data-test={"transaction-create-amount-input"}
-                    error={(touched || value !== initialValue) && Boolean(error)}
+                    error={
+                      (touched || value !== initialValue) && Boolean(error)
+                    }
                     helperText={touched || value !== initialValue ? error : ""}
                     InputProps={{
                       inputComponent: NumberFormatCustom as any,
@@ -152,7 +172,10 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                 )}
               </Field>
               <Field name="description">
-                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
+                {({
+                  field,
+                  meta: { error, value, initialValue, touched },
+                }: FieldProps) => (
                   <TextField
                     variant="outlined"
                     margin="dense"
@@ -162,13 +185,21 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     type="text"
                     placeholder="Add a note"
                     data-test={"transaction-create-description-input"}
-                    error={(touched || value !== initialValue) && Boolean(error)}
+                    error={
+                      (touched || value !== initialValue) && Boolean(error)
+                    }
                     helperText={touched || value !== initialValue ? error : ""}
                     {...field}
                   />
                 )}
               </Field>
-              <Grid container spacing={2} direction="row" justify="center" alignItems="center">
+              <Grid
+                container
+                spacing={2}
+                direction="row"
+                justify="center"
+                alignItems="center"
+              >
                 <Grid item>
                   <Button
                     type="submit"

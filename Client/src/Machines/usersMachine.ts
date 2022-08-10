@@ -8,9 +8,12 @@ export const usersMachine = dataMachine("users").withConfig({
     fetchData: async (ctx, event: any) => {
       const payload = omit("type", event);
       let route = isEmpty(payload) ? "users" : "users/search";
-      const resp = await httpClient.get(`http://localhost:${backendPort}/${route}`, {
-        params: !isEmpty(payload) ? payload : undefined,
-      });
+      const resp = await httpClient.get(
+        `http://localhost:${backendPort}/${route}`,
+        {
+          params: !isEmpty(payload) ? payload : undefined,
+        }
+      );
       return resp.data;
     },
   },
