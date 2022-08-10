@@ -1,10 +1,8 @@
 import { omit } from "lodash/fp";
 import { Machine, assign } from "xstate";
-//@ts-ignore
 import { dataMachine } from "./dataMachine";
-// import { httpClient } from "../utils/asyncUtils";
-import { User, TransactionCreatePayload } from "../models";
-//@ts-ignore
+import { httpClient } from "../utils/asyncUtils";
+import { User, TransactionCreatePayload } from "../models/user";
 import { authService } from "./AuthMachine";
 import { backendPort } from "../utils/portUtils";
 
