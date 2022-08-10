@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import NumberFormat from "react-number-format";
+import NumberFormat from "react-number-format";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { string, object, number } from "yup";
 import {
@@ -38,32 +38,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// interface NumberFormatCustomProps {
-//   inputRef: (instance: NumberFormat | null) => void;
-//   onChange: (event: { target: { value: string } }) => void;
-// }
+interface NumberFormatCustomProps {
+  inputRef: (instance: NumberFormat | null) => void;
+  onChange: (event: { target: { value: string } }) => void;
+}
 
-// function NumberFormatCustom(props: NumberFormatCustomProps) {
-//   const { inputRef, onChange, ...other } = props;
+function NumberFormatCustom(props: NumberFormatCustomProps) {
+  const { inputRef, onChange, ...other } = props;
 
-//   return (
-//     <NumberFormat
-//       {...other}
-//       getInputRef={inputRef}
-//       onValueChange={(values) => {
-//         onChange({
-//           target: {
-//             ...other,
-//             value: values.value,
-//           },
-//         });
-//       }}
-//       thousandSeparator
-//       isNumericString
-//       prefix="$"
-//     />
-//   );
-// }
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            ...other,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+      prefix="$"
+    />
+  );
+}
 
 export interface TransactionCreateStepTwoProps {
   receiver: User;
@@ -164,6 +164,7 @@ const TransactionCreateStepTwo: React.FC<TransactionCreateStepTwoProps> = ({
                     }
                     helperText={touched || value !== initialValue ? error : ""}
                     InputProps={{
+                      inputComponent: NumberFormatCustom as any,
                       inputProps: { id: "amount" },
                     }}
                     {...field}

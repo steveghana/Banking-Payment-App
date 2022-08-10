@@ -94,7 +94,10 @@ export const dataMachine = (machineId: string) =>
           states: {
             unknown: {
               on: {
-                "": [{ target: "withData", cond: "hasData" }, { target: "withoutData" }],
+                "": [
+                  { target: "withData", cond: "hasData" },
+                  { target: "withoutData" },
+                ],
               },
             },
             withData: {},
@@ -126,7 +129,8 @@ export const dataMachine = (machineId: string) =>
         })),
       },
       guards: {
-        hasData: (ctx: DataContext, event) => !!ctx.results && ctx.results.length > 0,
+        hasData: (ctx: DataContext, event) =>
+          !!ctx.results && ctx.results.length > 0,
       },
     }
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import {
   Paper,
   Typography,
@@ -13,9 +13,9 @@ import { Interpreter } from "xstate";
 import {
   CreateTransactionMachineContext,
   CreateTransactionMachineEvents,
-} from "../Machines/createTransactionMachine";
-import { useActor } from "@xstate/react";
-// import { formatAmount } from "../utils/transactionUtils";
+} from "../machines/createTransactionMachine";
+import { useService } from "@xstate/react";
+import { formatAmount } from "../utils/transactionUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,9 +37,9 @@ export interface TransactionCreateStepThreeProps {
 const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
   createTransactionService,
 }) => {
-  const history = useNavigate();
+  const history = useHistory();
   const classes = useStyles();
-  const [createTransactionState, sendCreateTransaction] = useActor(
+  const [createTransactionState, sendCreateTransaction] = useService(
     createTransactionService
   );
 
@@ -107,7 +107,9 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
                 ? "Paid "
                 : "Requested "}
               {transactionDetails?.amount &&
-                parseInt(transactionDetails.amount, 10) * 100}{" "}
+                formatAmount(
+                  parseInt(transactionDetails.amount, 10) * 100
+                )}{" "}
               for {transactionDetails?.description}
             </Typography>
           </Grid>
@@ -144,7 +146,7 @@ const TransactionCreateStepThree: React.FC<TransactionCreateStepThreeProps> = ({
               /* istanbul ignore next */
               onClick={() => {
                 sendCreateTransaction("RESET");
-                history("/transaction/new");
+                history.push("/transaction/new");
               }}
               data-test="new-transaction-create-another-transaction"
             >

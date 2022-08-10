@@ -1,5 +1,7 @@
 import { omit } from "lodash/fp";
-// import { dataMachine } from "./dataMachine";
+import gql from "graphql-tag";
+import { httpClient } from "../utils/asyncUtils";
+import { dataMachine } from "./dataMachine";
 import axios from "axios";
 let backendPort = 5000;
 const listBankAccountQuery = gql`
@@ -50,29 +52,38 @@ const createBankAccountMutation = gql`
 export const bankAccountsMachine = dataMachine("bankAccounts").withConfig({
   services: {
     fetchData: async (ctx, event: any) => {
-      const resp = await axios.post(`http://localhost:${backendPort}/graphql`, {
-        operationName: "ListBankAccount",
-        query: listBankAccountQuery.loc?.source.body,
-      });
+      const resp = await httpClient.post(
+        `http://localhost:${backendPort}/graphql`,
+        {
+          operationName: "ListBankAccount",
+          query: listBankAccountQuery.loc?.source.body,
+        }
+      );
       return { results: resp.data.data.listBankAccount, pageData: {} };
     },
     deleteData: async (ctx, event: any) => {
       const payload = omit("type", event);
-      const resp = await axios.post(`http://localhost:${backendPort}/graphql`, {
-        operationName: "DeleteBankAccount",
-        query: deleteBankAccountMutation.loc?.source.body,
-        variables: payload,
-      });
+      const resp = await httpClient.post(
+        `http://localhost:${backendPort}/graphql`,
+        {
+          operationName: "DeleteBankAccount",
+          query: deleteBankAccountMutation.loc?.source.body,
+          variables: payload,
+        }
+      );
       return resp.data;
     },
     createData: async (ctx, event: any) => {
       const payload = omit("type", event);
-      // const resp = await axios.post(`http://localhost:${backendPort}/graphql`, {
-      //   operationName: "CreateBankAccount",
-      //   query: createBankAccountMutation.loc?.source.body,
-      //   variables: payload,
-      // });
-      // return resp.data;
+      const resp = await httpClient.post(
+        `http://localhost:${backendPort}/graphql`,
+        {
+          operationName: "CreateBankAccount",
+          query: createBankAccountMutation.loc?.source.body,
+          variables: payload,
+        }
+      );
+      return resp.data;
     },
   },
 });
